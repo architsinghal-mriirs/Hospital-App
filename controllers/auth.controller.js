@@ -11,7 +11,7 @@ const signup = async (req,res) => {
     if(!response){
         return res.status(500).json(serverError);
     }
-    console.log("Response", response);
+
     if(response.error){
         return res.status(400).json({
             message: response.error,
@@ -20,6 +20,7 @@ const signup = async (req,res) => {
             error : response.details
         })
     }
+
     return res.status(200).json({
         message: 'Successfully signed up',
         success: true,
@@ -35,11 +36,11 @@ const signin = async (req,res) => {
             success: false,
         })
     }
-    console.log("User lolololol", user);
+    
     if(user.error){
         return res.status(500).json(serverError);
     }
-    console.log(authService.checkPassword(req.body.password, user.password));
+
     if(!authService.checkPassword(req.body.password, user.password)){
         return res.status(400).json({
             message : 'Incorrect Password',
@@ -47,9 +48,9 @@ const signin = async (req,res) => {
         })
     }
     const token = authService.createToken({id: user.id, email: user.email});
-    console.log("token", token);
+   
     if(!token){
-        return res.status(500).json(serverError);
+        return 
     }
 
     return res.status(200).json({
@@ -58,6 +59,14 @@ const signin = async (req,res) => {
         success : true
     })
 
+}
+
+const updateUserRole = async (req,res) => {
+    const response = await authService.updateUserRole(req.body.role, req.body.userId);
+    if(!response){
+        return res.status(500).json(serverError);
+    }
+    
 }
 
 module.exports = {
